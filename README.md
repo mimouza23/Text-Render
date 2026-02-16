@@ -10,7 +10,7 @@ https://github.com/user-attachments/assets/ae1c972c-65f4-4b20-8874-159b63638b95
 ### Key Features
  - Instant Transparency: Automatically exports as a transparent PNG, perfect for design work.
  - Customization: Adjust font style, size, color.
- - Privacy: All processing happens serverside.
+ - Privacy: All processing happens clientside.
  - No Install Required: Works directly in the browser.
 
 ### Why:
