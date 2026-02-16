@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Text to Image Renderer - Free Online Tool</title>
+    <meta name="description" content="Free online tool to render text to transparent PNG images with custom fonts. Supports TTF, OTF, and WOFF fonts. Perfect for creating text graphics, logos, and social media content.">
+    <meta name="keywords" content="text to image, font renderer, custom font tool, transparent PNG text, text graphics generator">
+    <meta name="author" content="mimouza23">
+    <meta property="og:title" content="Text to Image Renderer">
+    <meta property="og:description" content="Render text to transparent PNG with custom fonts">
+    <meta property="og:type" content="website">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background-color: #1e1e1e;
+            color: #cccccc;
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            color: #e7e7e7;
+            font-size: 28px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .subtitle {
+            color: #858585;
+            font-size: 14px;
+            margin-bottom: 32px;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            color: #e7e7e7;
+            font-size: 13px;
+            font-weight: 500;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        input[type="text"],
+        input[type="number"],
+        input[type="file"],
+        input[type="color"],
+        select {
+            width: 100%;
+            padding: 12px 16px;
+            background-color: #252526;
+            border: 1px solid #3e3e42;
+            border-radius: 6px;
+            color: #cccccc;
+            font-size: 14px;
+            transition: border-color 0.2s, background-color 0.2s;
+        }
+
+        input[type="color"] {
+            padding: 4px;
+            height: 44px;
+            cursor: pointer;
+        }
+
+        input[type="text"]:focus,
+        input[type="number"]:focus,
+        select:focus {
+            outline: none;
+            border-color: #007acc;
+            background-color: #2d2d30;
+        }
+
+        input[type="file"] {
+            padding: 10px;
+            cursor: pointer;
+        }
+
+        input[type="file"]::file-selector-button {
+            background-color: #0e639c;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-right: 12px;
+            font-size: 13px;
+            transition: background-color 0.2s;
+        }
+
+        input[type="file"]::file-selector-button:hover {
+            background-color: #1177bb;
+        }
+
+        .font-info {
+            font-size: 12px;
+            color: #858585;
+            margin-top: 6px;
+        }
+
+        .row {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 20px;
+        }
+
+        .three-col {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 20px;
+        }
+
+        button {
+            background-color: #0e639c;
+            color: white;
+            border: none;
+            padding: 14px 28px;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            margin-top: 10px;
+        }
+
+        button:hover {
+            background-color: #1177bb;
+        }
+
+        button:active {
+            background-color: #094771;
+        }
+
+        .canvas-container {
+            margin-top: 32px;
+            padding: 20px;
+            background-color: #252526;
+            border-radius: 8px;
+            border: 1px solid #3e3e42;
+            text-align: center;
+            min-height: 200px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        canvas {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+        }
+
+        .placeholder {
+            color: #858585;
+            font-size: 14px;
+        }
+
+        .download-btn {
+            background-color: #238636;
+            margin-top: 20px;
+        }
+
+        .download-btn:hover {
+            background-color: #2ea043;
+        }
+
+        .download-btn:disabled {
+            background-color: #3e3e42;
+            cursor: not-allowed;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        /* Dropdown styles */
+        .dropdown-section {
+            margin-bottom: 16px;
+            border: 1px solid #3e3e42;
+            border-radius: 6px;
+            overflow: hidden;
+        }
+
+        .dropdown-header {
+            background-color: #252526;
+            padding: 12px 16px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: background-color 0.2s;
+        }
+
+        .dropdown-header:hover {
+            background-color: #2d2d30;
+        }
+
+        .dropdown-header span {
+            font-size: 13px;
+            font-weight: 500;
+            color: #e7e7e7;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .dropdown-arrow {
+            transition: transform 0.2s;
+            color: #858585;
+        }
+
+        .dropdown-section.open .dropdown-arrow {
+            transform: rotate(180deg);
+        }
+
+        .dropdown-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+            background-color: #1e1e1e;
+        }
+
+        .dropdown-section.open .dropdown-content {
+            max-height: 500px;
+        }
+
+        .dropdown-inner {
+            padding: 20px;
+        }
+
+        /* About section */
+        .about-section {
+            margin-top: 40px;
+            padding-top: 32px;
+            border-top: 1px solid #3e3e42;
+        }
+
+        .about-content {
+            color: #858585;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .about-content p {
+            margin-bottom: 12px;
+        }
+
+        .about-content a {
+            color: #4ec9b0;
+            text-decoration: none;
+        }
+
+        .about-content a:hover {
+            text-decoration: underline;
+        }
+
+        .github-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 12px;
+            padding: 10px 16px;
+            background-color: #252526;
+            border: 1px solid #3e3e42;
+            border-radius: 6px;
+            color: #cccccc;
+            text-decoration: none;
+            font-size: 14px;
+            transition: background-color 0.2s, border-color 0.2s;
+        }
+
+        .github-link:hover {
+            background-color: #2d2d30;
+            border-color: #4ec9b0;
+            text-decoration: none;
+        }
+
+        .github-icon {
+            width: 20px;
+            height: 20px;
+            fill: currentColor;
+        }
+
+        select option {
+            background-color: #252526;
+            color: #cccccc;
+        }
+
+        .empty-option {
+            color: #858585;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Text to Image Renderer</h1>
+        <p class="subtitle">Render text to transparent PNG with custom fonts</p>
+
+        <div class="input-group">
+            <label for="textInput">Text to Render</label>
+            <input type="text" id="textInput" placeholder="Enter your text here..." value="Hello World">
+        </div>
+
+        <div class="row">
+            <div class="input-group">
+                <label for="fontFile">Font File (TTF/OTF/WOFF)</label>
+                <input type="file" id="fontFile" accept=".ttf,.otf,.woff,.woff2">
+                <p class="font-info">Leave empty to use system font (Segoe UI, sans-serif)</p>
+            </div>
+            <div class="input-group">
+                <label for="recentFonts">Recent Fonts</label>
+                <select id="recentFonts">
+                    <option value="" class="empty-option">-- Select a recent font --</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="input-group">
+                <label for="fontSize">Font Size</label>
+                <input type="number" id="fontSize" value="256" min="8" max="1000">
+            </div>
+        </div>
+
+        <div class="dropdown-section">
+            <div class="dropdown-header" onclick="toggleDropdown(this)">
+                <span>Styling Options</span>
+                <span class="dropdown-arrow">▼</span>
+            </div>
+            <div class="dropdown-content">
+                <div class="dropdown-inner">
+                    <div class="three-col">
+                        <div class="input-group">
+                            <label for="textColor">Text Colour</label>
+                            <input type="color" id="textColor" value="#000000">
+                        </div>
+                        <div class="input-group">
+                            <label for="outlineColor">Outline Colour</label>
+                            <input type="color" id="outlineColor" value="#ffffff">
+                        </div>
+                        <div class="input-group">
+                            <label for="outlineSize">Outline Size (px)</label>
+                            <input type="number" id="outlineSize" value="0" min="0" max="50">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <button id="renderBtn">Render Image</button>
+
+        <div class="canvas-container">
+            <div id="placeholder" class="placeholder">Click "Render Image" to generate preview</div>
+            <canvas id="canvas" class="hidden"></canvas>
+        </div>
+
+        <button id="downloadBtn" class="download-btn" disabled>Download PNG</button>
+
+        <div class="about-section">
+            <div class="dropdown-section">
+                <div class="dropdown-header" onclick="toggleDropdown(this)">
+                    <span>About & Info</span>
+                    <span class="dropdown-arrow">▼</span>
+                </div>
+                <div class="dropdown-content">
+                    <div class="dropdown-inner about-content">
+                        <p><strong>Text to Image Renderer</strong> is a free, browser-based tool for converting text into transparent PNG images. Perfect for creating text graphics, logos, social media content, and design assets.</p>
+                        <p>Features include custom font upload (TTF, OTF, WOFF formats), adjustable font sizes up to 1000px, text and outline color customization, and high-quality transparent PNG output.</p>
+                        <p>All processing happens locally in your browser - no data is uploaded to any server. Your fonts and text remain private and secure.</p>
+                        <p>This is an open-source project. Contributions, bug reports, and feature requests are welcome!</p>
+                        <a href="https://github.com/mimouza23" target="_blank" rel="noopener noreferrer" class="github-link">
+                            <svg class="github-icon" viewBox="0 0 16 16">
+                                <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/>
+                            </svg>
+                            github.com/mimouza23
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const textInput = document.getElementById('textInput');
+        const fontFile = document.getElementById('fontFile');
+        const recentFonts = document.getElementById('recentFonts');
+        const fontSize = document.getElementById('fontSize');
+        const textColor = document.getElementById('textColor');
+        const outlineColor = document.getElementById('outlineColor');
+        const outlineSize = document.getElementById('outlineSize');
+        const renderBtn = document.getElementById('renderBtn');
+        const downloadBtn = document.getElementById('downloadBtn');
+        const canvas = document.getElementById('canvas');
+        const placeholder = document.getElementById('placeholder');
+        const ctx = canvas.getContext('2d');
+
+        let customFont = null;
+        let fontBuffers = {};
+
+        // Load recent fonts from localStorage
+        function loadRecentFonts() {
+            const recent = JSON.parse(localStorage.getItem('recentFonts') || '[]');
+            recentFonts.innerHTML = '<option value="" class="empty-option">-- Select a recent font --</option>';
+            recent.forEach(font => {
+                const option = document.createElement('option');
+                option.value = font.name;
+                option.textContent = font.name;
+                recentFonts.appendChild(option);
+            });
+        }
+
+        // Save font to localStorage
+        async function saveFont(name, arrayBuffer) {
+            let recent = JSON.parse(localStorage.getItem('recentFonts') || '[]');
+            
+            // Remove if already exists
+            recent = recent.filter(f => f.name !== name);
+            
+            // Add to beginning
+            recent.unshift({ name: name, buffer: Array.from(new Uint8Array(arrayBuffer)) });
+            
+            // Keep only last 5
+            recent = recent.slice(0, 5);
+            
+            localStorage.setItem('recentFonts', JSON.stringify(recent));
+            
+            // Store buffer for later use
+            fontBuffers[name] = arrayBuffer;
+            
+            loadRecentFonts();
+        }
+
+        // Load font from recent selection
+        async function loadRecentFont(name) {
+            const recent = JSON.parse(localStorage.getItem('recentFonts') || '[]');
+            const fontData = recent.find(f => f.name === name);
+            
+            if (fontData) {
+                const arrayBuffer = new Uint8Array(fontData.buffer).buffer;
+                try {
+                    const fontFace = new FontFace('CustomFont', arrayBuffer);
+                    await fontFace.load();
+                    document.fonts.add(fontFace);
+                    customFont = 'CustomFont';
+                    fontBuffers[name] = arrayBuffer;
+                } catch (err) {
+                    alert('Error loading font: ' + err.message);
+                    customFont = null;
+                }
+            }
+        }
+
+        // Initial load
+        loadRecentFonts();
+
+        fontFile.addEventListener('change', async (e) => {
+            const file = e.target.files[0];
+            if (!file) {
+                customFont = null;
+                return;
+            }
+
+            try {
+                const arrayBuffer = await file.arrayBuffer();
+                const fontFace = new FontFace('CustomFont', arrayBuffer);
+                await fontFace.load();
+                document.fonts.add(fontFace);
+                customFont = 'CustomFont';
+                
+                // Save to recent
+                await saveFont(file.name, arrayBuffer);
+            } catch (err) {
+                alert('Error loading font: ' + err.message);
+                customFont = null;
+            }
+        });
+
+        recentFonts.addEventListener('change', (e) => {
+            const selectedFont = e.target.value;
+            if (selectedFont) {
+                loadRecentFont(selectedFont);
+            } else {
+                customFont = null;
+            }
+        });
+
+        renderBtn.addEventListener('click', () => {
+            const text = textInput.value;
+            if (!text) {
+                alert('Please enter some text');
+                return;
+            }
+
+            const size = parseInt(fontSize.value) || 256;
+            const color = textColor.value;
+            const strokeColor = outlineColor.value;
+            const strokeWidth = parseInt(outlineSize.value) || 0;
+            const fontFamily = customFont || '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
+
+            // Calculate canvas size (ridiculous size to prevent cutoff)
+            const canvasWidth = size * text.length;
+            const canvasHeight = size * 4;
+
+            canvas.width = canvasWidth;
+            canvas.height = canvasHeight;
+
+            // Clear with transparent background
+            ctx.clearRect(0, 0, canvasWidth, canvasHeight);
+
+            // Set font
+            ctx.font = `${size}px ${fontFamily}`;
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+
+            const x = canvasWidth / 2;
+            const y = canvasHeight / 2;
+
+            // Draw outline if size > 0
+            if (strokeWidth > 0) {
+                ctx.strokeStyle = strokeColor;
+                ctx.lineWidth = strokeWidth;
+                ctx.strokeText(text, x, y);
+            }
+
+            // Draw text
+            ctx.fillStyle = color;
+            ctx.fillText(text, x, y);
+
+            // Show canvas, hide placeholder
+            canvas.classList.remove('hidden');
+            placeholder.classList.add('hidden');
+            downloadBtn.disabled = false;
+        });
+
+        downloadBtn.addEventListener('click', () => {
+            const link = document.createElement('a');
+            link.download = 'render_output.png';
+            link.href = canvas.toDataURL('image/png');
+            link.click();
+        });
+
+        // Dropdown toggle
+        function toggleDropdown(header) {
+            const section = header.parentElement;
+            section.classList.toggle('open');
+        }
+    </script>
+</body>
+</html>
